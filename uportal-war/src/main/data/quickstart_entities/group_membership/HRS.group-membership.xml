@@ -20,27 +20,16 @@
 
 -->
 <group script="classpath://org/jasig/portal/io/import-group_membership_v3-2.crn">
-  <name>All categories</name>
+  <name>HRS</name>
   <entity-type>org.jasig.portal.portlet.om.IPortletDefinition</entity-type>
   <creator>system</creator>
-  <description>All channel categories</description>
+  <description>HRS Integration Portlets</description>
   <children>
-    <group>Academics</group>
-    <group>Administration</group>
-    <group>Advisor</group>
-    <group>Demonstration</group>
-    <group>Development</group>
-    <group>Entertainment</group>
-    <group>Finances</group>
-    <group>Information</group>
-    <group>Instructors</group>
-    <group>Library</group>
-    <group>News</group>
-    <group>Research</group>
-    <group>Services</group>
-    <group>Testing</group>
-    <group>Work</group>
-    <group>uPortal</group>
-    <group>HRS</group>
+    <literal>HRSBenefits</literal>
+    <literal>HRSBusinessEmailAdmin</literal>
+    <literal>HRSContactInfo</literal>
+    <literal>HRSEarningsStatement</literal>
+    <literal>HRSManagerTimeApproval</literal>
+    <literal>HRSTimeAndAbsence</literal>
   </children>
 </group>

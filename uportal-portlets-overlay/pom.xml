@@ -23,6 +23,7 @@
         <module>cas-proxy-test-portlet</module>
         <module>email-preview</module>
         <module>FunctionalTestsPortlet</module>
+        <module>HrsPortlets</module>
         <module>jasig-widget-portlets</module>
         <module>pluto-testsuite</module>
         <module>NewsReaderPortlet</module>

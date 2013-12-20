@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<portlet-definition xmlns="https://source.jasig.org/schemas/uportal/io/portlet-definition" xmlns:ns2="https://source.jasig.org/schemas/uportal" xmlns:ns3="https://source.jasig.org/schemas/uportal/io/portlet-type" xmlns:ns4="https://source.jasig.org/schemas/uportal/io/event-aggregation" xmlns:ns5="https://source.jasig.org/schemas/uportal/io/stylesheet-descriptor" xmlns:ns6="https://source.jasig.org/schemas/uportal/io/permission-owner" xmlns:ns7="https://source.jasig.org/schemas/uportal/io/subscribed-fragment" xmlns:ns8="https://source.jasig.org/schemas/uportal/io/user" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="4.0" xsi:schemaLocation="https://source.jasig.org/schemas/uportal/io/portlet-definition https://source.jasig.org/schemas/uportal/io/portlet-definition/portlet-definition-4.0.xsd">
+    <title>Contact Information</title>
+    <name>Contact Information</name>
+    <fname>HRSContactInfo</fname>
+    <desc>Employees are able to view their contact information.</desc>
+    <type>Portlet</type>
+    <timeout>30000</timeout>
+    <portlet-descriptor>
+        <ns2:webAppName>/HRSPortlets</ns2:webAppName>
+        <ns2:portletName>ContactInfo</ns2:portletName>
+    </portlet-descriptor>
+    <category>HRS</category>
+
+    <group>Staff</group>
+    <group>Fragment Owners</group>
+
+    <parameter>
+        <name>alternate</name>
+        <value>false</value>
+    </parameter>
+    <parameter>
+        <name>blockImpersonation</name>
+        <value>false</value>
+    </parameter>
+    <parameter>
+        <name>disableDynamicTitle</name>
+        <value>true</value>
+    </parameter>
+    <parameter>
+        <name>editable</name>
+        <value>false</value>
+    </parameter>
+    <parameter>
+        <name>hasAbout</name>
+        <value>false</value>
+    </parameter>
+    <parameter>
+        <name>hasHelp</name>
+        <value>false</value>
+    </parameter>
+    <parameter>
+        <name>hideFromMobile</name>
+        <value>false</value>
+    </parameter>
+    <parameter>
+        <name>highlight</name>
+        <value>false</value>
+    </parameter>
+    <parameter>
+        <name>locale</name>
+        <value>false</value>
+    </parameter>
+    <parameter>
+        <name>secure</name>
+        <value>false</value>
+    </parameter>
+    <parameter>
+        <name>showChrome</name>
+        <value>true</value>
+    </parameter>
+    <portlet-preference>
+        <name>helpUrl</name>
+        <readOnly>false</readOnly>
+        <value>https://uwservice.wisc.edu/help/payroll.php</value>
+    </portlet-preference>
+    <portlet-preference>
+        <name>notification</name>
+        <readOnly>false</readOnly>
+        <value>This is an example notification.  It can even include &lt;a href=https://github.com/Jasig/hrs-portlets target=_blank&gt;a hyperlink&lt;/a&gt;</value>
+    </portlet-preference>
+</portlet-definition>
