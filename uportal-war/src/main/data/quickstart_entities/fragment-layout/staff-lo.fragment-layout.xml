@@ -36,6 +36,13 @@
                     <value>60%</value>
                 </structure-attribute>
                 <channel fname="staff-feature" unremovable="false" hidden="false" immutable="false" ID="n7"/>
+                <channel fname="HRSEarningsStatement" unremovable="false" hidden="false" immutable="false" ID="n61"/>
+                <channel fname="HRSManagerTimeApproval" unremovable="false" hidden="false" immutable="false" ID="n62"/>
+                <channel fname="HRSBenefits" unremovable="false" hidden="false" immutable="false" ID="n63"/>
+                <channel fname="HRSTimeAndAbsence" unremovable="false" hidden="false" immutable="false" ID="n64"/>
+
+                
+
             </folder>
             <folder ID="s8" hidden="false" immutable="false" name="Column 2" type="regular" unremovable="false">
                 <structure-attribute>
@@ -44,6 +51,10 @@
                 </structure-attribute>
                 <channel fname="notification" unremovable="false" hidden="false" immutable="false" ID="n9"/>
                 <channel fname="whos-online" unremovable="false" hidden="false" immutable="false" ID="n10"/>
+                <channel fname="HRSBusinessEmailAdmin" unremovable="false" hidden="false" immutable="false" ID="n81"/>
+                <channel fname="HRSContactInfo" unremovable="false" hidden="false" immutable="false" ID="n82"/>
+
+
             </folder>
         </folder>
     </folder>

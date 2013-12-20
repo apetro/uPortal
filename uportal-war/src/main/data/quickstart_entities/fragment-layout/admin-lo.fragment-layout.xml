@@ -45,6 +45,7 @@
           <channel fname="announcementsAdmin" unremovable="false" hidden="false" immutable="false" ID="n11"/>
           <channel fname="emergency-alert-admin" unremovable="false" hidden="false" immutable="false" ID="n12"/>
           <channel fname="please-register" unremovable="false" hidden="false" immutable="false" ID="n13"/>
+          <channel fname="HRSBusinessEmailAdmin" unremovable="false" hidden="false" immutable="false" ID="n14"/>
       </folder>
     </folder>
   </folder>
