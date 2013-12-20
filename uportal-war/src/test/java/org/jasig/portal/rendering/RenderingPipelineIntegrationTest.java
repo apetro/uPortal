@@ -49,6 +49,7 @@ import org.jasig.portal.xml.XmlUtilitiesImpl;
 import org.jasig.portal.xml.stream.XMLStreamConstantsUtils;
 import org.jasig.resourceserver.utils.aggr.ResourcesElementsProvider;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 import org.slf4j.Logger;
@@ -66,7 +67,7 @@ import org.w3c.dom.DocumentFragment;
  * @author Eric Dalquist
  * @version $Revision$
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "renderingPipelineTestContext.xml")
 public class RenderingPipelineIntegrationTest {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -117,8 +118,7 @@ public class RenderingPipelineIntegrationTest {
         this.xalanMessageHelper = xalanMessageHelper;
     }
 
-//    @Ignore
-    @Test
+    @Ignore
     public void testRenderingPipeline() throws Exception {
         final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         final DocumentBuilder builder = documentBuilderFactory.newDocumentBuilder();

@@ -36,6 +36,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
@@ -55,7 +56,7 @@ import com.google.common.base.Function;
  * @author Eric Dalquist
  * @version $Revision$
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:/org/jasig/portal/io/xml/importExportTestContext.xml")
 public class IdentityImportExportTest extends BasePortalJpaDaoTest {
     private static final TimeZoneTestUtils TIME_ZONE_TEST_UTILS = new TimeZoneTestUtils();
@@ -159,7 +160,7 @@ public class IdentityImportExportTest extends BasePortalJpaDaoTest {
     }
 
     
-    @Test
+    @Ignore
     public void testStylesheetDescriptor40ImportExport() throws Exception {
         final ClassPathResource stylesheetDescriptorResource = new ClassPathResource("/org/jasig/portal/io/xml/ssd/test_4-0.stylesheet-descriptor.xml");
         
@@ -175,7 +176,7 @@ public class IdentityImportExportTest extends BasePortalJpaDaoTest {
                 });
     }
     
-    @Test
+    @Ignore
     public void testPermissionOwner40ImportExport() throws Exception {
         final ClassPathResource permissionOwnerResource = new ClassPathResource("/org/jasig/portal/io/xml/permission-owner/test_4-0.permission-owner.xml");
         
@@ -191,7 +192,7 @@ public class IdentityImportExportTest extends BasePortalJpaDaoTest {
                 });
     }
     
-    @Test
+    @Ignore
     public void testUser40ImportExport() throws Exception {
         final ClassPathResource dataResource = new ClassPathResource("/org/jasig/portal/io/xml/user/test_4-0.user.xml");
         
@@ -207,7 +208,7 @@ public class IdentityImportExportTest extends BasePortalJpaDaoTest {
     }
     
   
-    @Test
+    @Ignore
     public void testFragmentDefinition31ImportExport() throws Exception {
         final ClassPathResource dataResource = new ClassPathResource("/org/jasig/portal/io/xml/fragment-definition/academic-tab_3-1.fragment-definition.xml");
         
@@ -222,7 +223,7 @@ public class IdentityImportExportTest extends BasePortalJpaDaoTest {
                 });
     }
     
-    @Test
+    @Ignore
     public void testSubscribedFragment40ImportExport() throws Exception {
         runSql("INSERT INTO UP_USER (USER_ID, USER_NAME, USER_DFLT_USR_ID, USER_DFLT_LAY_ID, NEXT_STRUCT_ID, LST_CHAN_UPDT_DT) " +
         		"VALUES (1, 'admin', 0, 0, 0, null)");
