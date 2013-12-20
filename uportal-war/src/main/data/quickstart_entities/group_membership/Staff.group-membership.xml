@@ -25,6 +25,7 @@
   <creator>system</creator>
   <description>All staff members</description>
   <children>
+    <literal>Portal Administrator</literal>
     <literal>staff</literal>
     <literal>staff-lo</literal>
   </children>
