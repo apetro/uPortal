@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jasig.portal.EntityIdentifier;
 import org.jasig.portal.portlet.om.IPortletDefinition;
 import org.jasig.portal.portlet.om.IPortletDefinitionId;
@@ -44,6 +46,14 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
+
+/**
+ * Suitable for JSON serialization by end users with BROWSE permission on the portlet definition - only
+ * end-user-facing getters are marked JsonProperty (so users can see e.g. the portlet title but not the portlet
+ * preferences).
+ */
+@JsonAutoDetect(getterVisibility= NONE, isGetterVisibility = NONE, setterVisibility = NONE, fieldVisibility = NONE)
 public class MarketplacePortletDefinition implements IPortletDefinition{
 
     public static final String MARKETPLACE_FNAME = "portletmarketplace";
@@ -178,6 +188,7 @@ public class MarketplacePortletDefinition implements IPortletDefinition{
     /**
      * @return the screenShotList. Will not be null.
      */
+    @JsonProperty
     public List<ScreenShot> getScreenShots() {
         if(screenShots==null){
             this.initScreenShots();
@@ -192,6 +203,7 @@ public class MarketplacePortletDefinition implements IPortletDefinition{
     /**
      * @return the releaseNotes. Will not be null.
      */
+    @JsonProperty
     public PortletReleaseNotes getPortletReleaseNotes() {
         if(releaseNotes==null){
             this.initPortletReleaseNotes();
@@ -230,6 +242,23 @@ public class MarketplacePortletDefinition implements IPortletDefinition{
             this.initCategories();
         }
         return this.parentCategories;
+    }
+
+    /**
+     * Convenience accessor for the *names* of the parent categories, suitable for UI display.
+     * @return potentially empty non-null Set of category names
+     */
+    @JsonProperty
+    public Set<String> getParentCategoryNames() {
+        Set<String> categoryNames = new HashSet<>();
+
+        Set<PortletCategory> categories = getParentCategories();
+
+        for (PortletCategory category : categories) {
+            categoryNames.add(category.getName());
+        }
+
+        return categoryNames;
     }
 
     private void setRelatedPortlets(Set<IPortletDefinition> relatedPortlets){
@@ -297,21 +326,25 @@ public class MarketplacePortletDefinition implements IPortletDefinition{
 			return this.portletDefinition.setPortletPreferences(portletPreferences);
 	}
 
+    @JsonProperty
 	@Override
 	public PortletLifecycleState getLifecycleState() {
 		return this.portletDefinition.getLifecycleState();
 	}
 
+    @JsonProperty
 	@Override
 	public String getFName() {
 		return this.portletDefinition.getFName();
 	}
 
+    @JsonProperty
 	@Override
 	public String getName() {
 		return this.portletDefinition.getName();
 	}
 
+    @JsonProperty
 	@Override
 	public String getDescription() {
 		return this.portletDefinition.getDescription();
@@ -322,6 +355,7 @@ public class MarketplacePortletDefinition implements IPortletDefinition{
 		return this.portletDefinition.getPortletDescriptorKey();
 	}
 
+    @JsonProperty
 	@Override
 	public String getTitle() {
 		return this.portletDefinition.getTitle();
@@ -542,7 +576,7 @@ public class MarketplacePortletDefinition implements IPortletDefinition{
 		this.portletDefinition.removeParameter(name);
 	}
 
-
+    @JsonProperty
 	@Override
 	public Double getRating() {
 		return this.portletDefinition.getRating();
@@ -554,7 +588,7 @@ public class MarketplacePortletDefinition implements IPortletDefinition{
 		this.portletDefinition.setRating(rating);
 	}
 
-
+    @JsonProperty
 	@Override
 	public Long getUsersRated() {
 		return this.portletDefinition.getUsersRated();
@@ -566,6 +600,7 @@ public class MarketplacePortletDefinition implements IPortletDefinition{
 		this.portletDefinition.setUsersRated(usersRated);
 	}
 
+    @JsonProperty
     public String getShortURL() {
         return shortURL;
     }
