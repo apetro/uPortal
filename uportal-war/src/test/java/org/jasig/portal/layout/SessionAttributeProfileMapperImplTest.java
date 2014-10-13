@@ -20,6 +20,7 @@ package org.jasig.portal.layout;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,6 +66,28 @@ public class SessionAttributeProfileMapperImplTest {
         when(session.getAttribute("key")).thenReturn("key2");
         final String fname = mapper.getProfileFname(person, request);
         assertEquals("fname2", fname);
+    }
+
+    /**
+     * Test that when the key is not recognized, returns the default.
+     */
+    @Test
+    public void testReturnsDefaultWhenNotMapped() {
+        when(session.getAttribute("key")).thenReturn("bogusKeyValue");
+
+        assertEquals("profile", mapper.getProfileFname(person, request));
+
+    }
+
+    /**
+     * Test that stores requested profile key.
+     */
+    @Test
+    public void testStoresDesiredProfileKeyIntoSession() {
+
+        mapper.storeRequestedProfileKeyIntoSession("profileKey", session);
+
+        verify(session).setAttribute("key", "profileKey");
     }
 
 }

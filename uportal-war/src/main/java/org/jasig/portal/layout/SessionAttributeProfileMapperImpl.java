@@ -93,6 +93,29 @@ public class SessionAttributeProfileMapperImpl implements IProfileMapper {
         return defaultProfileName;
     }
 
+    /**
+     * Store the requested profile key into the user Session so that this SessionAttributeProfileMapperImpl
+     * can subsequently find it and use it to determine a profile mapping.
+     * @param profileKey key to desired profile, or null indicating no desired profile.
+     * @param session non-null Session
+     */
+    public void storeRequestedProfileKeyIntoSession(final String profileKey, final HttpSession session) {
+
+        Assert.notNull(session, "Cannot store requested profile key into a null session.");
+
+        session.setAttribute(this.attributeName, profileKey);
+
+        logger.trace("Stored desired profile key [{}] into session (at attribute [{}]).", profileKey, attributeName);
+
+        String fnameTheKeyMapsTo = this.mappings.get(profileKey);
+
+        if (null == fnameTheKeyMapsTo) {
+            logger.warn("The desired profile key {} has no mapping so will have no effect.",
+                    profileKey);
+        }
+
+    }
+
     @Override
     public String toString() {
         return "SessionAttributeProfileMapper which considers session attribute [" + this.attributeName +
