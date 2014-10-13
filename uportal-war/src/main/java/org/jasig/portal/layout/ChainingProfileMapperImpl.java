@@ -54,6 +54,8 @@ public class ChainingProfileMapperImpl implements IProfileMapper {
         for (IProfileMapper mapper : subMappers) {
             final String fname = mapper.getProfileFname(person, request);
             if (fname != null) {
+                logger.trace("Sub-mapper [{}] returned profile fname [{}], so chaining mapper returning that.",
+                        mapper, fname);
                 return fname;
             }
         }
