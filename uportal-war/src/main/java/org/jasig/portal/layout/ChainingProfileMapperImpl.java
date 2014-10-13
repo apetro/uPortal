@@ -190,4 +190,10 @@ public final class ChainingProfileMapperImpl implements IProfileMapper {
         layoutStore.updateUserProfile(person, stickyProfile);
     }
 
+    @Override
+    public String toString() {
+        return "ChainingProfileMapper that wraps chain [" + subMappers +
+                "] and falls back on default [" + defaultProfileName + "].";
+    }
+
 }
