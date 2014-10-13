@@ -150,7 +150,15 @@ public final class ChainingProfileMapperImpl implements IProfileMapper {
         }
 
         // If we reach this point w/o selecting something else, we apply the default
-        return rslt != null ? rslt : defaultProfileName;
+
+        if (rslt == null) {
+            rslt = this.defaultProfileName;
+            logger.trace("None of the chained profile mappers [{}] mapped to a profile, " +
+                            "so returning default profile [{}].",
+                    subMappers, defaultProfileName);
+        }
+
+        return rslt;
 
     }
 
