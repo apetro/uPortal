@@ -57,6 +57,9 @@ public class ChainingProfileMapperImpl implements IProfileMapper {
                 return fname;
             }
         }
+        logger.trace("None of the chained profile mappers [{}] mapped to a profile, " +
+                "so returning default profile [{}].",
+                subMappers, defaultProfileName);
         return defaultProfileName;
     }
 
