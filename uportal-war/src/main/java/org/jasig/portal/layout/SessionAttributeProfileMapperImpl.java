@@ -25,6 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.jasig.portal.security.IPerson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 /**
  * 
@@ -33,6 +36,8 @@ import org.jasig.portal.security.IPerson;
  */
 public class SessionAttributeProfileMapperImpl implements IProfileMapper {
     public static final String DEFAULT_SESSION_ATTRIBUTE_NAME = "profileKey";
+
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     private Map<String,String> mappings = Collections.<String,String>emptyMap();
     private String defaultProfileName = null;
@@ -64,6 +69,7 @@ public class SessionAttributeProfileMapperImpl implements IProfileMapper {
     public String getProfileFname(IPerson person, HttpServletRequest request) {
         final HttpSession session = request.getSession(false);
         if (session == null) {
+            logger.debug("Cannot get a session-stored profile fname from a null session, so returning null.");
             return null;
         }
         
@@ -71,10 +77,19 @@ public class SessionAttributeProfileMapperImpl implements IProfileMapper {
         if (requestedProfileKey != null) {
             final String profileName = mappings.get(requestedProfileKey);
             if (profileName != null) {
+                logger.debug("The stored requested profile key {} mapped to profile fname {}.",
+                        requestedProfileKey, profileName);
                 return profileName;
+            } else {
+                logger.warn("The stored requested profile key {} does not map to any profile fname.",
+                        requestedProfileKey);
             }
+        } else {
+            logger.trace("There is no requested profile key stored at session attribute {}.",
+                    attributeName);
         }
 
+        logger.trace("Falling back on default profile name {} .", defaultProfileName);
         return defaultProfileName;
     }
 
