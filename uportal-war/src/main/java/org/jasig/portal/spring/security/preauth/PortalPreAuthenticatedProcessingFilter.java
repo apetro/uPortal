@@ -173,9 +173,15 @@ public class PortalPreAuthenticatedProcessingFilter extends AbstractPreAuthentic
         }
         
         else if (logoutPath.equals(currentPath)) {
-            // clear out the current security context so we can re-establish
-            // it once the new session is established
+
             SecurityContextHolder.clearContext();
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("Path [" + currentPath + "] is logoutPath, so cleared security context" +
+                        " so can re-establish it once the new session is established.");
+            }
+
+
             chain.doFilter(request, response);
         }
         
