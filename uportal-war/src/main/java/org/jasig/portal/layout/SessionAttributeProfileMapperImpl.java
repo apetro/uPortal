@@ -35,6 +35,12 @@ import org.springframework.util.Assert;
  * @version $Revision$
  */
 public class SessionAttributeProfileMapperImpl implements IProfileMapper {
+
+    /**
+     * Since uPortal 4.2, instead of externally relying upon this key and hoping that a runtime
+     * SessionAttributeProfileMapperImpl is not configured to use a different key,
+     * consider instead storeRequestedProfileKeyIntoSession() .
+     */
     public static final String DEFAULT_SESSION_ATTRIBUTE_NAME = "profileKey";
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -98,6 +104,7 @@ public class SessionAttributeProfileMapperImpl implements IProfileMapper {
      * can subsequently find it and use it to determine a profile mapping.
      * @param profileKey key to desired profile, or null indicating no desired profile.
      * @param session non-null Session
+     * @since uPortal 4.2
      */
     public void storeRequestedProfileKeyIntoSession(final String profileKey, final HttpSession session) {
 
