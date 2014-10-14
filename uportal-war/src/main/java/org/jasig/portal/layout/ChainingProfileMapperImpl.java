@@ -88,7 +88,7 @@ public final class ChainingProfileMapperImpl implements IProfileMapper {
 
         String rslt = null;  // indicates profile has not yet been set
 
-        logger.trace("Choosing profile for user '{}';  stickySelection={}", person.getUserName(), stickySelection);
+        logger.debug("Choosing profile for user '{}';  stickySelection={}", person.getUserName(), stickySelection);
 
         for (IProfileMapper mapper : subMappers) {
             final String fname = mapper.getProfileFname(person, request);
@@ -144,8 +144,7 @@ public final class ChainingProfileMapperImpl implements IProfileMapper {
 
         // Sanity check to be certain we don't return a "broken" profile
         if (STICKY_PROFILE_FNAME.equals(rslt)) {
-            logger.warn("Selected synthetic (pointer) profile for user '{}';  falling back to default of '{}'",
-                                                                person.getUserName(), defaultProfileName);
+            logger.warn("Selected synthetic (pointer) profile for user '{}'", person.getUserName());
             rslt = defaultProfileName;
         }
 
@@ -161,6 +160,7 @@ public final class ChainingProfileMapperImpl implements IProfileMapper {
         return rslt;
 
     }
+
 
     /*
      * Private stuff
@@ -194,6 +194,13 @@ public final class ChainingProfileMapperImpl implements IProfileMapper {
     }
 
     private void updateStickyProfile(IPerson person, UserProfile stickyProfile, String profileName) {
+        if (person.getID() == -1) {
+            try {
+                throw new RuntimeException();
+            } catch (Exception e) {
+                e.printStackTrace(System.out);
+            }
+        }
         stickyProfile.setProfileName(profileName);
         layoutStore.updateUserProfile(person, stickyProfile);
     }
