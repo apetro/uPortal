@@ -35,7 +35,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jasig.portal.PortalException;
 import org.jasig.portal.events.IPortalEventFactory;
-import org.jasig.portal.layout.SessionAttributeProfileMapperImpl;
+import org.jasig.portal.layout.profile.SessionAttributeProfileMapperImpl;
 import org.jasig.portal.portlets.swapper.IdentitySwapperPrincipal;
 import org.jasig.portal.portlets.swapper.IdentitySwapperSecurityContext;
 import org.jasig.portal.security.IPerson;

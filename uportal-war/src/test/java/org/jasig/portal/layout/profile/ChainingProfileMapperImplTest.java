@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.portal.layout;
+package org.jasig.portal.layout.profile;
 
 import static org.junit.Assert.assertEquals;
 
@@ -26,6 +26,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import static org.mockito.Mockito.*;
+
 import org.jasig.portal.security.IPerson;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +43,8 @@ public class ChainingProfileMapperImplTest {
     
     @Mock IPerson person;
     @Mock HttpServletRequest request;
-    @Mock IProfileMapper subMapper1;
+    @Mock
+    IProfileMapper subMapper1;
     @Mock IProfileMapper subMapper2;
     
     @Before

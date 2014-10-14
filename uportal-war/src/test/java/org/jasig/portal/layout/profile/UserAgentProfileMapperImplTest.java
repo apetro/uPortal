@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.portal.layout;
+package org.jasig.portal.layout.profile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,8 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import javax.servlet.http.HttpServletRequest;
 
-import org.jasig.portal.layout.UserAgentProfileMapper.Mapping;
+import org.jasig.portal.layout.profile.UserAgentProfileMapper;
+import org.jasig.portal.layout.profile.UserAgentProfileMapper.Mapping;
 import org.jasig.portal.security.IPerson;
 import org.junit.Before;
 import org.junit.Test;
