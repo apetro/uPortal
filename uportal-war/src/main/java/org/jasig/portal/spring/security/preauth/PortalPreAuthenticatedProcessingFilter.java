@@ -234,7 +234,14 @@ public class PortalPreAuthenticatedProcessingFilter extends AbstractPreAuthentic
         String originalEventSessionId = null;
         boolean swap = false;
         String swapperProfile = null;
+
+        final String requestedSessionId = request.getRequestedSessionId();
+
         if (request.isRequestedSessionIdValid()) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("doPortalAuthentication for valid requested session id " + requestedSessionId);
+            }
+
             try {
                 HttpSession s = request.getSession(false);
                 
@@ -255,11 +262,20 @@ public class PortalPreAuthenticatedProcessingFilter extends AbstractPreAuthentic
                 }
                 //Original person in session so this must be an un-swap request
                 else {
+                    if (logger.isDebugEnabled()) {
+                        logger.trace("This is an un-swap request swapping back from impersonated " + targetUid
+                                + " to original user " + originalUid + ".");
+                    }
+
                     final IPerson person = personManager.getPerson(request);
                     targetUid = person.getName();
                 }
 
                 if (s != null) {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Invalidating the impersonated session in un-swapping.");
+                    }
+
                     s.invalidate();
                 }
             }
@@ -271,6 +287,12 @@ public class PortalPreAuthenticatedProcessingFilter extends AbstractPreAuthentic
                     logger.trace("LoginServlet attempted to invalidate an already invalid session.", ise);
                 }
             }
+        } else {
+            if (logger.isTraceEnabled()) {
+                logger.trace("Requested session id " + requestedSessionId + " was not valid " +
+                        "so no attempt to apply swapping rules.");
+            }
+
         }
 
         //  Create the user's session
@@ -293,7 +315,9 @@ public class PortalPreAuthenticatedProcessingFilter extends AbstractPreAuthentic
             }
 
         } else {
-            logger.trace("No requested or swapper profile requested so set neither.");
+            if (logger.isTraceEnabled()) {
+                logger.trace("No requested or swapper profile requested so set neither.");
+            }
         }
 
         IPerson person = null;
