@@ -34,7 +34,8 @@ import org.springframework.util.Assert;
  * @author Jen Bourey, jennifer.bourey@gmail.com
  * @version $Revision$
  */
-public class SessionAttributeProfileMapperImpl implements IProfileMapper {
+public class SessionAttributeProfileMapperImpl
+    implements IProfileMapper, IProfileSelectionRequestHandler {
 
     /**
      * Since uPortal 4.2, instead of externally relying upon this key and hoping that a runtime
@@ -106,6 +107,7 @@ public class SessionAttributeProfileMapperImpl implements IProfileMapper {
      * @param session non-null Session
      * @since uPortal 4.2
      */
+    @Override
     public void storeRequestedProfileKeyIntoSession(final String profileKey, final HttpSession session) {
 
         Assert.notNull(session, "Cannot store requested profile key into a null session.");

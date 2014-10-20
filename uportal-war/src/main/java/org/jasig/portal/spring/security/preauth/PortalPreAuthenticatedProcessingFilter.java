@@ -35,7 +35,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jasig.portal.PortalException;
 import org.jasig.portal.events.IPortalEventFactory;
-import org.jasig.portal.layout.profile.SessionAttributeProfileMapperImpl;
+import org.jasig.portal.layout.profile.IProfileSelectionRequestHandler;
 import org.jasig.portal.portlets.swapper.IdentitySwapperPrincipal;
 import org.jasig.portal.portlets.swapper.IdentitySwapperSecurityContext;
 import org.jasig.portal.security.IPerson;
@@ -72,7 +72,7 @@ public class PortalPreAuthenticatedProcessingFilter extends AbstractPreAuthentic
     private IPortalEventFactory portalEventFactory;
 
     // optionally Autowired, may be null indicating no need to provision such a mapping
-    private SessionAttributeProfileMapperImpl sessionAttributeProfileMapper;
+    private IProfileSelectionRequestHandler profileSelectionRequestHandler;
     
     @Autowired
     public void setIdentitySwapperManager(IdentitySwapperManager identitySwapperManager) {
@@ -90,8 +90,8 @@ public class PortalPreAuthenticatedProcessingFilter extends AbstractPreAuthentic
     }
 
     @Autowired(required=false)
-    public void setSessionAttributeProfileMapper(SessionAttributeProfileMapperImpl sessionProfileMapper) {
-        this.sessionAttributeProfileMapper = sessionProfileMapper;
+    public void setProfileSelectionRequestHandler(IProfileSelectionRequestHandler sessionProfileMapper) {
+        this.profileSelectionRequestHandler = sessionProfileMapper;
     }
 
     @Override
@@ -300,15 +300,15 @@ public class PortalPreAuthenticatedProcessingFilter extends AbstractPreAuthentic
 
         final String requestedProfile = request.getParameter(LoginController.REQUESTED_PROFILE_KEY);
         if (requestedProfile != null) {
-            if (this.sessionAttributeProfileMapper != null) {
-                this.sessionAttributeProfileMapper.storeRequestedProfileKeyIntoSession(requestedProfile, s);
+            if (this.profileSelectionRequestHandler != null) {
+                this.profileSelectionRequestHandler.storeRequestedProfileKeyIntoSession(requestedProfile, s);
             } else {
                 logger.warn("A profile was requested via request attribute " +
                         "but no support for session-tracked requested profiles present so ignoring.");
             }
         } else if(swapperProfile != null) {
-            if (this.sessionAttributeProfileMapper != null) {
-                this.sessionAttributeProfileMapper.storeRequestedProfileKeyIntoSession(swapperProfile, s);
+            if (this.profileSelectionRequestHandler != null) {
+                this.profileSelectionRequestHandler.storeRequestedProfileKeyIntoSession(swapperProfile, s);
             } else {
                 logger.warn("A swapper profile was requested " +
                         "but no support for session-tracked requested profile present so ignoring.");
