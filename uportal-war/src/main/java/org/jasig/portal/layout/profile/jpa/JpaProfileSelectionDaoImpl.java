@@ -84,7 +84,7 @@ public class JpaProfileSelectionDaoImpl
     public IProfileSelection readProfileSelectionForUser(final String userName) {
 
         final NaturalIdQuery<JpaProfileSelection> query = createNaturalIdQuery(JpaProfileSelection.class);
-        query.using(ProfileSelection_.userName, userName);
+        query.using(JpaProfileSelection_.userName, userName);
 
         return query.load();
     }
