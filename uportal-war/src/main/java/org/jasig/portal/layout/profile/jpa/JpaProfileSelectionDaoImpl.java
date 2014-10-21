@@ -28,7 +28,7 @@ import org.springframework.stereotype.Repository;
 /**
  * JPA implementation of IProfilePreferenceDao.
  */
-@Repository
+// NOT @Repository so that adopters can decide whether to instantiate through context XML declaration or not.
 public class JpaProfileSelectionDaoImpl
     extends BasePortalJpaDao
     implements IProfileSelectionDao {
