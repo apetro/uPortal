@@ -40,7 +40,7 @@ public class SessionAttributeProfileMapperImpl
     /**
      * Since uPortal 4.2, instead of externally relying upon this key and hoping that a runtime
      * SessionAttributeProfileMapperImpl is not configured to use a different key,
-     * consider instead storeRequestedProfileKeyIntoSession() .
+     * consider instead handleProfileSelectionRequest() .
      */
     public static final String DEFAULT_SESSION_ATTRIBUTE_NAME = "profileKey";
 
@@ -104,19 +104,23 @@ public class SessionAttributeProfileMapperImpl
      * Store the requested profile key into the user Session so that this SessionAttributeProfileMapperImpl
      * can subsequently find it and use it to determine a profile mapping.
      * @param profileKey key to desired profile, or null indicating no desired profile.
-     * @param session non-null Session
+     * @param request non-null Session
      * @since uPortal 4.2
      */
     @Override
-    public void storeRequestedProfileKeyIntoSession(final String profileKey, final HttpSession session) {
+    public void handleProfileSelectionRequest(final String profileKey, final HttpServletRequest request) {
 
-        Assert.notNull(session, "Cannot store requested profile key into a null session.");
+        Assert.notNull(request, "Cannot handle profile selection on a null ServletRequest");
+
+        HttpSession session = request.getSession(false);
+
+        Assert.notNull(session, "Cannot store a profile selection into a null session.");
 
         session.setAttribute(this.attributeName, profileKey);
 
         logger.trace("Stored desired profile key [{}] into session (at attribute [{}]).", profileKey, attributeName);
 
-        String fnameTheKeyMapsTo = this.mappings.get(profileKey);
+        final String fnameTheKeyMapsTo = this.mappings.get(profileKey);
 
         if (null == fnameTheKeyMapsTo) {
             logger.warn("The desired profile key {} has no mapping so will have no effect.",

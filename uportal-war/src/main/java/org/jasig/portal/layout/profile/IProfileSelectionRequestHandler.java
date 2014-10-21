@@ -18,6 +18,7 @@
  */
 package org.jasig.portal.layout.profile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -31,5 +32,5 @@ import javax.servlet.http.HttpSession;
  * @since uPortal 4.2
  */
 public interface IProfileSelectionRequestHandler {
-    void storeRequestedProfileKeyIntoSession(String profileKey, HttpSession session);
+    void handleProfileSelectionRequest(String profileKey, HttpServletRequest request);
 }
