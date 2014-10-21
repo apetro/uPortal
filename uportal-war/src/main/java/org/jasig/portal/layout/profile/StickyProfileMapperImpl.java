@@ -33,7 +33,8 @@ public class StickyProfileMapperImpl
     private IProfileSelectionRegistry profileSelectionRegistry;
 
     @Override
-    public void handleProfileSelectionRequest(final String profileKey, final HttpServletRequest request) {
+    public void handleProfileSelectionRequest(final String profileKey, IPerson person, final HttpServletRequest request) {
+
 
 
 

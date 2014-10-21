@@ -108,7 +108,7 @@ public class SessionAttributeProfileMapperImpl
      * @since uPortal 4.2
      */
     @Override
-    public void handleProfileSelectionRequest(final String profileKey, final HttpServletRequest request) {
+    public void handleProfileSelectionRequest(final String profileKey, IPerson person, final HttpServletRequest request) {
 
         Assert.notNull(request, "Cannot handle profile selection on a null ServletRequest");
 

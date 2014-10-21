@@ -355,14 +355,14 @@ public class PortalPreAuthenticatedProcessingFilter extends AbstractPreAuthentic
         final String requestedProfile = request.getParameter(LoginController.REQUESTED_PROFILE_KEY);
         if (requestedProfile != null) {
             if (this.profileSelectionRequestHandler != null) {
-                this.profileSelectionRequestHandler.handleProfileSelectionRequest(requestedProfile, request);
+                this.profileSelectionRequestHandler.handleProfileSelectionRequest(requestedProfile, person, request);
             } else {
                 logger.warn("A profile was requested via request attribute " +
                         "but no support for session-tracked requested profiles present so ignoring.");
             }
         } else if(swapperProfile != null) {
             if (this.profileSelectionRequestHandler != null) {
-                this.profileSelectionRequestHandler.handleProfileSelectionRequest(swapperProfile, request);
+                this.profileSelectionRequestHandler.handleProfileSelectionRequest(swapperProfile, person, request);
             } else {
                 logger.warn("A swapper profile was requested " +
                         "but no support for session-tracked requested profile present so ignoring.");

@@ -80,7 +80,7 @@ public class SessionAttributeProfileMapperImplTest {
 
         // first the mapper handles a profile selection request, at user /Login
 
-        mapper.handleProfileSelectionRequest("key2", request);
+        mapper.handleProfileSelectionRequest("key2", person, request);
 
         // then the mapper is subsequently consulted in the context of that session
 
@@ -119,7 +119,7 @@ public class SessionAttributeProfileMapperImplTest {
      */
     @Test
     public void testMapsToNullWhenRequestedKeyNotMappedAndNoDefaultConfigured() {
-        mapper.handleProfileSelectionRequest("bogusKey", request);
+        mapper.handleProfileSelectionRequest("bogusKey", person , request);
 
         assertEquals(null, mapper.getProfileFname(person, request));
 
@@ -135,7 +135,7 @@ public class SessionAttributeProfileMapperImplTest {
 
         mapper.setDefaultProfileName("default_profile_fname");
 
-        mapper.handleProfileSelectionRequest("bogusKey", request);
+        mapper.handleProfileSelectionRequest("bogusKey", person , request);
 
         assertEquals("default_profile_fname", mapper.getProfileFname(person, request));
 

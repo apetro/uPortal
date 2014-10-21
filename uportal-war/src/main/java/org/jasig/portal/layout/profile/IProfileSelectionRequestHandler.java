@@ -18,6 +18,8 @@
  */
 package org.jasig.portal.layout.profile;
 
+import org.jasig.portal.security.IPerson;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -32,5 +34,15 @@ import javax.servlet.http.HttpSession;
  * @since uPortal 4.2
  */
 public interface IProfileSelectionRequestHandler {
-    void handleProfileSelectionRequest(String profileKey, HttpServletRequest request);
+
+    /**
+     * Handle user desire for a profile, identified by a String profile key.
+     *
+     * Specified to throw NullPointerException on unacceptably null arguments ( Validate.notNull() behavior ).
+     * @param profileKey non-null key to desired profile
+     * @param person non-null IPerson
+     * @param request non-null request
+     * @throws NullPointerException if either profileKey or request or person is null
+     */
+    void handleProfileSelectionRequest(String profileKey, IPerson person, HttpServletRequest request);
 }
