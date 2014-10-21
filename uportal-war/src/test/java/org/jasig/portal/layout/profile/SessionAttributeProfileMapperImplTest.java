@@ -126,7 +126,7 @@ public class SessionAttributeProfileMapperImplTest {
     }
 
     /**
-     * Test that when awaare of a desired profile selection,
+     * Test that when aware of a desired profile selection,
      * but that desire does not map to a configured profile fname,
      * then returns configured default.
      */
