@@ -19,6 +19,7 @@
 package org.jasig.portal.layout.profile;
 
 import org.jasig.portal.security.IPerson;
+import org.jasig.portal.security.IdentitySwapperManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -42,6 +43,8 @@ public class StickyProfileMapperImplTest {
 
     @Mock IProfileSelectionRegistry registry;
 
+    @Mock IdentitySwapperManager identitySwapperManager;
+
     @Before
     public void setUp() throws Exception {
 
@@ -49,12 +52,15 @@ public class StickyProfileMapperImplTest {
 
         when(registry.profileSelectionForUser("bobby")).thenReturn("profileFNameFromRegistry");
 
+        when(identitySwapperManager.isImpersonating(request)).thenReturn(false);
+
         Map<String,String> mappings = new HashMap<String,String>();
         mappings.put("validKey1", "profileFName1");
         mappings.put("validKey2", "profileFName2");
 
         stickyMapper = new StickyProfileMapperImpl();
         stickyMapper.setProfileSelectionRegistry(registry);
+        stickyMapper.setIdentitySwapperManager(identitySwapperManager);
         stickyMapper.setMappings(mappings);
 
         when(person.getUserName()).thenReturn("bobby");
@@ -88,6 +94,21 @@ public class StickyProfileMapperImplTest {
         verifyNoMoreInteractions(registry);
 
     }
+
+    /**
+     * Test that when the identity is swapped, ignores profile selection requests.
+     */
+    @Test
+    public void testIgnoresSelectionWhenIdentitySwapped() {
+
+        // override the configuration in setUp()
+        when(identitySwapperManager.isImpersonating(request)).thenReturn(true);
+
+        stickyMapper.handleProfileSelectionRequest("validKey1", person , request);
+
+        verifyZeroInteractions(registry);
+    }
+
     /**
      * Test that ignores requests for profile using a key that does not map to any known profile.
      */

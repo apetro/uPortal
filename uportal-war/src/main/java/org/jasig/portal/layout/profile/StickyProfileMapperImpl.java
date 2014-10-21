@@ -21,6 +21,8 @@ package org.jasig.portal.layout.profile;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.Validate;
 import org.jasig.portal.security.IPerson;
+import org.jasig.portal.security.IdentitySwapperManager;
+import org.jasig.portal.security.IdentitySwapperManagerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,9 @@ public class StickyProfileMapperImpl
     // dependency injected as "mappings", required.
     private Map<String, String> immutableMappings;
 
+    // autowired
+    private IdentitySwapperManager identitySwapperManager;
+
     @Override
     public void handleProfileSelectionRequest(final String profileKey, IPerson person, final HttpServletRequest request) {
 
@@ -60,6 +65,11 @@ public class StickyProfileMapperImpl
             return;
         }
 
+        if (identitySwapperManager.isImpersonating(request)) {
+            logger.debug("Ignoring selection of profile by key {} in the context of user {} because impersonated.",
+                   profileKey, userName );
+            return;
+        }
 
         final String profileFName = immutableMappings.get(profileKey);
 
@@ -92,4 +102,10 @@ public class StickyProfileMapperImpl
 
         this.immutableMappings = ImmutableMap.copyOf(mappings);
     }
+
+    @Autowired
+    public void setIdentitySwapperManager(final IdentitySwapperManager manager) {
+        this.identitySwapperManager = manager;
+    }
+
 }
