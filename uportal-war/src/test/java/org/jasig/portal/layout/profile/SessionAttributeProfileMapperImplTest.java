@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.jasig.portal.security.IPerson;
 import org.junit.Before;
