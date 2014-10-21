@@ -26,8 +26,11 @@ import org.mockito.MockitoAnnotations;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class StickyProfileMapperImplTest {
 
@@ -46,11 +49,15 @@ public class StickyProfileMapperImplTest {
 
         when(registry.profileSelectionForUser("bobby")).thenReturn("profileFNameFromRegistry");
 
-        when(person.getUserName()).thenReturn("bobby");
+        Map<String,String> mappings = new HashMap<String,String>();
+        mappings.put("validKey1", "profileFName1");
+        mappings.put("validKey2", "profileFName2");
 
         stickyMapper = new StickyProfileMapperImpl();
         stickyMapper.setProfileSelectionRegistry(registry);
+        stickyMapper.setMappings(mappings);
 
+        when(person.getUserName()).thenReturn("bobby");
     }
 
     /**
@@ -64,6 +71,35 @@ public class StickyProfileMapperImplTest {
         assertEquals("profileFNameFromRegistry", mappedFName);
 
     }
+
+    /**
+     * Test that stores selection to registry.
+     */
+    @Test
+    public void testStoresValidSelectionToRegistry() {
+
+        stickyMapper.handleProfileSelectionRequest("validKey1", person , request);
+
+        verify(registry).registerUserProfileSelection("bobby", "profileFName1");
+
+        // this verifyNoMoreInteractions() is questionable
+        // it makes the test over-specified, but it would catch some weird bugs wherein the profile mapper
+        // might have done weird unexpected things to the registry.
+        verifyNoMoreInteractions(registry);
+
+    }
+    /**
+     * Test that ignores requests for profile using a key that does not map to any known profile.
+     */
+    @Test
+    public void testIgnoresInvalidProfileKey() {
+
+        stickyMapper.handleProfileSelectionRequest("bogusKey", person, request);
+
+        verifyZeroInteractions(registry);
+
+    }
+
 
     /**
      * Test that when asked about the profile mapping for a null IPerson,
@@ -81,14 +117,25 @@ public class StickyProfileMapperImplTest {
      * throws NullPointerException (which is the Validate.notNull() behavior).
      */
     @Test( expected = NullPointerException.class )
-    public void testThrowsNullPointerExceptionOnServletRequest() {
+    public void testThrowsNullPointerExceptionOnNullServletRequestOnGetProfileFname() {
 
         stickyMapper.getProfileFname(person, null);
 
     }
 
     /**
-     * Test that when asked about the profile mapping for a broken IPerson with a null userName,
+     * Test that when asked to handle a profile selection with a null HttpServletRequest,
+     * throws NullPointerException (which is the Validate.notNull() behavior).
+     */
+    @Test( expected = NullPointerException.class )
+    public void testThrowsNullPointerExceptionOnNullServletRequestOnHandleSelectionRequest() {
+
+        stickyMapper.handleProfileSelectionRequest("validKey1", person, null);
+
+    }
+
+    /**
+     * Test that when asked to handle profile selection by a broken IPerson with a null userName,
      * throws NullPointerException (which is the Validate.notNull() behavior).
      */
     @Test( expected = NullPointerException.class )
@@ -98,6 +145,17 @@ public class StickyProfileMapperImplTest {
         when(person.getUserName()).thenReturn(null);
 
         stickyMapper.getProfileFname(person, request);
+
+    }
+
+    /**
+     * Test that when asked to handle selection of a null profile,
+     * throws NullPointerException (which is the Validate.notNull() behavior).
+     */
+    @Test( expected = NullPointerException.class )
+    public void testThrowsNullPointerExceptionOnNullDesiredProfileKey() {
+
+        stickyMapper.handleProfileSelectionRequest(null, person, request);
 
     }
 

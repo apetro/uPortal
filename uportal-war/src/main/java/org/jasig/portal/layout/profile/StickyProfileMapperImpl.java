@@ -18,11 +18,17 @@
  */
 package org.jasig.portal.layout.profile;
 
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.Validate;
 import org.jasig.portal.security.IPerson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Required;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * Created by apetro on 10/21/14.
@@ -30,14 +36,34 @@ import javax.servlet.http.HttpServletRequest;
 public class StickyProfileMapperImpl
     implements IProfileMapper, IProfileSelectionRequestHandler {
 
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
+
+    // autowired
     private IProfileSelectionRegistry profileSelectionRegistry;
+
+    // dependency injected as "mappings", required.
+    private Map<String, String> immutableMappings;
 
     @Override
     public void handleProfileSelectionRequest(final String profileKey, IPerson person, final HttpServletRequest request) {
 
+        Validate.notNull(profileKey, "Cannot handle selection of null profile.");
+        Validate.notNull(person, "Cannot handle selection by a null person.");
+        Validate.notNull(person.getUserName(), "Cannot handle selection by a person with a null username.");
+        Validate.notNull(request, "Cannot handle selection of null profile in context of null request.");
+
+        String userName = person.getUserName();
+
+        if (!immutableMappings.containsKey(profileKey)) {
+            logger.warn("User desired a profile by a key {} that does not map to any profile fname.  Ignoring.",
+                    profileKey);
+            return;
+        }
 
 
+        final String profileFName = immutableMappings.get(profileKey);
 
+        profileSelectionRegistry.registerUserProfileSelection(userName, profileFName);
     }
 
     @Override
@@ -59,4 +85,11 @@ public class StickyProfileMapperImpl
         this.profileSelectionRegistry = profileSelectionRegistry;
     }
 
+    @Required
+    public void setMappings(Map<String, String> mappings) {
+
+        Validate.notNull(mappings);
+
+        this.immutableMappings = ImmutableMap.copyOf(mappings);
+    }
 }
