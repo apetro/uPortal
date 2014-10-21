@@ -100,12 +100,9 @@ public class SessionAttributeProfileMapperImpl
         return defaultProfileName;
     }
 
-    /**
+    /*
      * Store the requested profile key into the user Session so that this SessionAttributeProfileMapperImpl
      * can subsequently find it and use it to determine a profile mapping.
-     * @param profileKey key to desired profile, or null indicating no desired profile.
-     * @param request non-null Session
-     * @since uPortal 4.2
      */
     @Override
     public void handleProfileSelectionRequest(final String profileKey, IPerson person, final HttpServletRequest request) {
