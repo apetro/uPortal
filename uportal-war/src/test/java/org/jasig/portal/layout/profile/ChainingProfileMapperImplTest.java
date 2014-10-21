@@ -34,8 +34,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 /**
+ * Unit tests for ChainingProfileMapperImpl.
+ *
  * @author Jen Bourey, jennifer.bourey@gmail.com
- * @version $RevisionR
  */
 public class ChainingProfileMapperImplTest {
     
@@ -43,9 +44,14 @@ public class ChainingProfileMapperImplTest {
     
     @Mock IPerson person;
     @Mock HttpServletRequest request;
-    @Mock
-    IProfileMapper subMapper1;
-    @Mock IProfileMapper subMapper2;
+
+    @Mock IProfileMapper subMapper1;
+
+    @Mock(extraInterfaces = IProfileSelectionRequestHandler.class)
+    IProfileMapper subMapper2;
+
+    @Mock(extraInterfaces = IProfileSelectionRequestHandler.class)
+    IProfileMapper subMapper3;
     
     @Before
     public void setUp() {
@@ -56,6 +62,7 @@ public class ChainingProfileMapperImplTest {
         List<IProfileMapper> subMappers = new ArrayList<IProfileMapper>();
         subMappers.add(subMapper1);
         subMappers.add(subMapper2);
+        subMappers.add(subMapper3);
         mapper.setSubMappers(subMappers);
     }
     
@@ -78,6 +85,20 @@ public class ChainingProfileMapperImplTest {
         when(subMapper2.getProfileFname(person, request)).thenReturn("profile2");
         String fname = mapper.getProfileFname(person, request);
         assertEquals("profile2", fname);
+    }
+
+    @Test
+    public void testBroadcastsProfileSelectionRequestToSubMappers() {
+
+        mapper.handleProfileSelectionRequest("key", person, request);
+
+        // subMapper1 does not implement handler interface, so should be ignored
+        verifyZeroInteractions(subMapper1);
+
+        // subMapper2 and 3 each implement the interface,
+        // so should each have had the opportunity to handle the selection.
+        verify((IProfileSelectionRequestHandler) subMapper2).handleProfileSelectionRequest("key", person, request);
+        verify((IProfileSelectionRequestHandler) subMapper3).handleProfileSelectionRequest("key", person, request);
     }
 
 }

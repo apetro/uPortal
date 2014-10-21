@@ -28,11 +28,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ * A chaining implementation of profile mapper that returns the profile fname selected by the first child that does
+ * not return null, and returns the configured default profile fname if all children returns null.
+ *
+ * Also implements the profile selection request handling, broadcasting the profile selection to all of the child
+ * mappers that implement the handler interface, which might be none.
+ *
  * @author Jen Bourey, jennifer.bourey@gmail.com
  * @version $Revision$
  */
-public class ChainingProfileMapperImpl implements IProfileMapper {
+public class ChainingProfileMapperImpl
+        implements IProfileMapper, IProfileSelectionRequestHandler {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
     
@@ -65,10 +71,29 @@ public class ChainingProfileMapperImpl implements IProfileMapper {
         return defaultProfileName;
     }
 
+    /*
+     * Delegate profile selection handling to those sub-mappers that implement the handler interface.
+     */
+    @Override
+    public void handleProfileSelectionRequest(
+            final String profileKey, final IPerson person, final HttpServletRequest request) {
+
+        for (final IProfileMapper mapper : subMappers) {
+
+            if (mapper instanceof IProfileSelectionRequestHandler) {
+                IProfileSelectionRequestHandler handler = (IProfileSelectionRequestHandler) mapper;
+
+                handler.handleProfileSelectionRequest(profileKey, person, request);
+
+            }
+
+        }
+
+    }
+
     @Override
     public String toString() {
         return "ChainingProfileMapper that wraps chain [" + subMappers +
                 "] and falls back on default [" + defaultProfileName + "].";
     }
-
 }
