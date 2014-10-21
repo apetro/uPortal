@@ -298,28 +298,6 @@ public class PortalPreAuthenticatedProcessingFilter extends AbstractPreAuthentic
         //  Create the user's session
         HttpSession s = request.getSession(true);
 
-        final String requestedProfile = request.getParameter(LoginController.REQUESTED_PROFILE_KEY);
-        if (requestedProfile != null) {
-            if (this.profileSelectionRequestHandler != null) {
-                this.profileSelectionRequestHandler.storeRequestedProfileKeyIntoSession(requestedProfile, s);
-            } else {
-                logger.warn("A profile was requested via request attribute " +
-                        "but no support for session-tracked requested profiles present so ignoring.");
-            }
-        } else if(swapperProfile != null) {
-            if (this.profileSelectionRequestHandler != null) {
-                this.profileSelectionRequestHandler.storeRequestedProfileKeyIntoSession(swapperProfile, s);
-            } else {
-                logger.warn("A swapper profile was requested " +
-                        "but no support for session-tracked requested profile present so ignoring.");
-            }
-
-        } else {
-            if (logger.isTraceEnabled()) {
-                logger.trace("No requested or swapper profile requested so set neither.");
-            }
-        }
-
         IPerson person = null;
         try {
             final HashMap<String, String> principals;
@@ -372,6 +350,28 @@ public class PortalPreAuthenticatedProcessingFilter extends AbstractPreAuthentic
             request.getSession(false).invalidate();
             // Add the authentication failure
             request.getSession(true).setAttribute(LoginController.AUTH_ERROR_KEY, Boolean.TRUE);
+        }
+
+        final String requestedProfile = request.getParameter(LoginController.REQUESTED_PROFILE_KEY);
+        if (requestedProfile != null) {
+            if (this.profileSelectionRequestHandler != null) {
+                this.profileSelectionRequestHandler.storeRequestedProfileKeyIntoSession(requestedProfile, s);
+            } else {
+                logger.warn("A profile was requested via request attribute " +
+                        "but no support for session-tracked requested profiles present so ignoring.");
+            }
+        } else if(swapperProfile != null) {
+            if (this.profileSelectionRequestHandler != null) {
+                this.profileSelectionRequestHandler.storeRequestedProfileKeyIntoSession(swapperProfile, s);
+            } else {
+                logger.warn("A swapper profile was requested " +
+                        "but no support for session-tracked requested profile present so ignoring.");
+            }
+
+        } else {
+            if (logger.isTraceEnabled()) {
+                logger.trace("No requested or swapper profile requested so set neither.");
+            }
         }
     }
 
