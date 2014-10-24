@@ -62,6 +62,7 @@ public class StickyProfileMapperImplTest {
         stickyMapper.setProfileSelectionRegistry(registry);
         stickyMapper.setIdentitySwapperManager(identitySwapperManager);
         stickyMapper.setMappings(mappings);
+        stickyMapper.setProfileKeyForNoSelection("default");
 
         when(person.getUserName()).thenReturn("bobby");
     }
@@ -119,6 +120,34 @@ public class StickyProfileMapperImplTest {
 
         verifyZeroInteractions(registry);
 
+    }
+
+    /**
+     * Test that when the user selects the profile key that the mapper is configured to consider meaning
+     * no preference, clears the selection in the registry.
+     */
+    @Test
+    public void testSelectingDefaultTranslatesToClearingSelection() {
+
+        stickyMapper.handleProfileSelectionRequest("default", person, request);
+
+        verify(registry).registerUserProfileSelection("bobby", null);
+
+    }
+
+    /**
+     * Test that when the presenting profile key both is a key in the key->fname map and is the configured
+     * key-that-ought-to-mean-no-preference, apathy wins.
+     */
+    @Test
+    public void testSelectingDefaultOverridesConfiguredMapping() {
+
+        stickyMapper.setProfileKeyForNoSelection("validKey2");
+
+        stickyMapper.handleProfileSelectionRequest("validKey2", person, request);
+
+        // verify that stored this as null, not as profileFName2
+        verify(registry).registerUserProfileSelection("bobby", null);
     }
 
 
