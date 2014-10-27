@@ -49,7 +49,7 @@ import java.io.Serializable;
 @NaturalIdCache
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-class JpaProfileSelection implements Serializable, IProfileSelection {
+class ProfileSelection implements Serializable, IProfileSelection {
 
     private static final long serialVersionUID = 1L;
 
@@ -73,14 +73,14 @@ class JpaProfileSelection implements Serializable, IProfileSelection {
      * Default constructor used by Hibernate.
      */
     @SuppressWarnings("unused")
-    private JpaProfileSelection() {
+    private ProfileSelection() {
         this.internalId = -1;
         this.entityVersion = -1;
         this.userName = null;
         this.profileFName = null;
     }
 
-    public JpaProfileSelection(final String userName, final String profileFName) {
+    public ProfileSelection(final String userName, final String profileFName) {
         this.internalId = -1;
         this.entityVersion = -1;
         this.userName = userName;

@@ -23,13 +23,12 @@ import org.jasig.portal.jpa.BasePortalJpaDao;
 import org.jasig.portal.jpa.OpenEntityManager;
 import org.jasig.portal.layout.profile.IProfileSelection;
 import org.jasig.portal.layout.profile.dao.IProfileSelectionDao;
-import org.jasig.portal.layout.profile.jpa.JpaProfileSelection_;
 
 /**
  * JPA implementation of IProfilePreferenceDao.
  */
 // NOT @Repository so that adopters can decide whether to instantiate through context XML declaration or not.
-public class JpaProfileSelectionDaoImpl
+public class ProfileSelectionDaoImpl
     extends BasePortalJpaDao
     implements IProfileSelectionDao {
 
@@ -43,7 +42,7 @@ public class JpaProfileSelectionDaoImpl
                 "Cannot create profile selection with empty profile fname " +
                         "(instead delete any selection for this user.)");
 
-        final JpaProfileSelection jpaProfileSelection = new JpaProfileSelection(userName, profileFName);
+        final ProfileSelection jpaProfileSelection = new ProfileSelection(userName, profileFName);
 
         getEntityManager().persist(jpaProfileSelection);
 
@@ -83,8 +82,8 @@ public class JpaProfileSelectionDaoImpl
     @OpenEntityManager(unitName = PERSISTENCE_UNIT_NAME)
     public IProfileSelection readProfileSelectionForUser(final String userName) {
 
-        final NaturalIdQuery<JpaProfileSelection> query = createNaturalIdQuery(JpaProfileSelection.class);
-        query.using(JpaProfileSelection_.userName, userName);
+        final NaturalIdQuery<ProfileSelection> query = createNaturalIdQuery(ProfileSelection.class);
+        query.using(ProfileSelection_.userName, userName);
 
         return query.load();
     }
