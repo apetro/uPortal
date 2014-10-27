@@ -16,7 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.portal.layout.profile;
+package org.jasig.portal.layout.profile.dao;
+
+import org.jasig.portal.layout.profile.IProfileSelection;
 
 /**
  * DAO API modeling user selection of a profile.
@@ -27,11 +29,11 @@ package org.jasig.portal.layout.profile;
 public interface IProfileSelectionDao {
 
     /**
-     * Creates, initializes, and persists a new {@link IProfileSelection} representing the given user's selection of
+     * Creates, initializes, and persists a new {@link org.jasig.portal.layout.profile.IProfileSelection} representing the given user's selection of
      * the given profile.
      * @param userName non-null username of user who has made the selection
      * @param profileFName fname of the selected profile, or null indicating no selection
-     * @return a newly created, initialized, and persisted {@link IProfileSelection}
+     * @return a newly created, initialized, and persisted {@link org.jasig.portal.layout.profile.IProfileSelection}
      * @throws IllegalArgumentException if userName is null
      * @throws org.springframework.dao.DataIntegrityViolationException if the user already has a profile selection.
      */

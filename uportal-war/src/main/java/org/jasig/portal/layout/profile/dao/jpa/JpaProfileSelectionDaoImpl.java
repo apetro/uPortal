@@ -16,14 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.portal.layout.profile.jpa;
+package org.jasig.portal.layout.profile.dao.jpa;
 
 import org.apache.commons.lang3.Validate;
 import org.jasig.portal.jpa.BasePortalJpaDao;
 import org.jasig.portal.jpa.OpenEntityManager;
 import org.jasig.portal.layout.profile.IProfileSelection;
-import org.jasig.portal.layout.profile.IProfileSelectionDao;
-import org.springframework.stereotype.Repository;
+import org.jasig.portal.layout.profile.dao.IProfileSelectionDao;
+import org.jasig.portal.layout.profile.jpa.JpaProfileSelection_;
 
 /**
  * JPA implementation of IProfilePreferenceDao.
