@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.context.ApplicationListener;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -57,7 +58,7 @@ import java.util.Map;
  * @since uPortal 4.2
  */
 public class StickyProfileMapperImpl
-    implements IProfileMapper, IProfileSelectionRequestHandler {
+    implements IProfileMapper, ApplicationListener<ProfileSelectionEvent> {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -88,43 +89,38 @@ public class StickyProfileMapperImpl
     }
 
     @Override
-    public void handleProfileSelectionRequest(final String profileKey, IPerson person, final HttpServletRequest request) {
+    public void onApplicationEvent(ProfileSelectionEvent event) {
 
-        Validate.notNull(profileKey, "Cannot handle selection of null profile.");
-        Validate.notNull(person, "Cannot handle selection by a null person.");
-        Validate.notNull(person.getUserName(), "Cannot handle selection by a person with a null username.");
-        Validate.notNull(request, "Cannot handle selection of null profile in context of null request.");
+        final String userName = event.getPerson().getUserName();
 
-        final String userName = person.getUserName();
-
-        if (identitySwapperManager.isImpersonating(request)) {
+        if (identitySwapperManager.isImpersonating(event.getRequest())) {
             logger.debug("Ignoring selection of profile by key {} in the context of user {} because impersonated.",
-                    profileKey, userName );
+                    event.getRequestedProfileKey(), userName );
             return;
         }
 
         if (profileKeyForNoSelection != null
-            && profileKeyForNoSelection.equals(profileKey)) {
+                && profileKeyForNoSelection.equals(event.getRequestedProfileKey())) {
 
             logger.trace("Translating {} selection of profile key {} to apathy about profile selection.",
-                    userName, profileKey);
+                    userName, event.getRequestedProfileKey());
             profileSelectionRegistry.registerUserProfileSelection(userName, null);
 
             return;
 
         }
 
-        if (!immutableMappings.containsKey(profileKey)) {
+        if (!immutableMappings.containsKey(event.getRequestedProfileKey())) {
             logger.warn("User desired a profile by a key {} that does not map to any profile fname.  Ignoring.",
-                    profileKey);
+                    event.getRequestedProfileKey());
             return;
         }
 
 
-        final String profileFName = immutableMappings.get(profileKey);
+        final String profileFName = immutableMappings.get(event.getRequestedProfileKey());
 
         logger.trace("Storing {} selection of profile fname {} (keyed by profile key {})",
-                userName, profileFName, profileKey);
+                userName, profileFName, event.getRequestedProfileKey());
         profileSelectionRegistry.registerUserProfileSelection(userName, profileFName);
     }
 
@@ -174,4 +170,5 @@ public class StickyProfileMapperImpl
     public void setProfileKeyForNoSelection(final String profileKeyForNoSelection) {
         this.profileKeyForNoSelection = profileKeyForNoSelection;
     }
+
 }

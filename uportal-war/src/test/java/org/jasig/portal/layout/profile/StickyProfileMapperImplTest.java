@@ -85,7 +85,9 @@ public class StickyProfileMapperImplTest {
     @Test
     public void testStoresValidSelectionToRegistry() {
 
-        stickyMapper.handleProfileSelectionRequest("validKey1", person , request);
+        ProfileSelectionEvent selectionEvent = new ProfileSelectionEvent(this, "validKey1", person, request);
+
+        stickyMapper.onApplicationEvent(selectionEvent);
 
         verify(registry).registerUserProfileSelection("bobby", "profileFName1");
 
@@ -105,7 +107,9 @@ public class StickyProfileMapperImplTest {
         // override the configuration in setUp()
         when(identitySwapperManager.isImpersonating(request)).thenReturn(true);
 
-        stickyMapper.handleProfileSelectionRequest("validKey1", person , request);
+        ProfileSelectionEvent selectionEvent = new ProfileSelectionEvent(this, "validKey1", person, request);
+
+        stickyMapper.onApplicationEvent(selectionEvent);
 
         verifyZeroInteractions(registry);
     }
@@ -116,7 +120,9 @@ public class StickyProfileMapperImplTest {
     @Test
     public void testIgnoresInvalidProfileKey() {
 
-        stickyMapper.handleProfileSelectionRequest("bogusKey", person, request);
+        ProfileSelectionEvent selectionEvent = new ProfileSelectionEvent(this, "bogusKey", person, request);
+
+        stickyMapper.onApplicationEvent(selectionEvent);
 
         verifyZeroInteractions(registry);
 
@@ -129,7 +135,9 @@ public class StickyProfileMapperImplTest {
     @Test
     public void testSelectingDefaultTranslatesToClearingSelection() {
 
-        stickyMapper.handleProfileSelectionRequest("default", person, request);
+        ProfileSelectionEvent selectionEvent = new ProfileSelectionEvent(this, "default", person, request);
+
+        stickyMapper.onApplicationEvent(selectionEvent);
 
         verify(registry).registerUserProfileSelection("bobby", null);
 
@@ -144,7 +152,9 @@ public class StickyProfileMapperImplTest {
 
         stickyMapper.setProfileKeyForNoSelection("validKey2");
 
-        stickyMapper.handleProfileSelectionRequest("validKey2", person, request);
+        ProfileSelectionEvent selectionEvent = new ProfileSelectionEvent(this, "validKey2", person, request);
+
+        stickyMapper.onApplicationEvent(selectionEvent);
 
         // verify that stored this as null, not as profileFName2
         verify(registry).registerUserProfileSelection("bobby", null);
@@ -174,17 +184,6 @@ public class StickyProfileMapperImplTest {
     }
 
     /**
-     * Test that when asked to handle a profile selection with a null HttpServletRequest,
-     * throws NullPointerException (which is the Validate.notNull() behavior).
-     */
-    @Test( expected = NullPointerException.class )
-    public void testThrowsNullPointerExceptionOnNullServletRequestOnHandleSelectionRequest() {
-
-        stickyMapper.handleProfileSelectionRequest("validKey1", person, null);
-
-    }
-
-    /**
      * Test that when asked to handle profile selection by a broken IPerson with a null userName,
      * throws NullPointerException (which is the Validate.notNull() behavior).
      */
@@ -195,17 +194,6 @@ public class StickyProfileMapperImplTest {
         when(person.getUserName()).thenReturn(null);
 
         stickyMapper.getProfileFname(person, request);
-
-    }
-
-    /**
-     * Test that when asked to handle selection of a null profile,
-     * throws NullPointerException (which is the Validate.notNull() behavior).
-     */
-    @Test( expected = NullPointerException.class )
-    public void testThrowsNullPointerExceptionOnNullDesiredProfileKey() {
-
-        stickyMapper.handleProfileSelectionRequest(null, person, request);
 
     }
 
