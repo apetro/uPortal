@@ -26,19 +26,20 @@ import javax.servlet.http.HttpServletRequest;
 import org.jasig.portal.security.IPerson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationListener;
 
 /**
  * A chaining implementation of profile mapper that returns the profile fname selected by the first child that does
  * not return null, and returns the configured default profile fname if all children returns null.
  *
- * Also implements the profile selection request handling, broadcasting the profile selection to all of the child
- * mappers that implement the handler interface, which might be none.
- *
  * @author Jen Bourey, jennifer.bourey@gmail.com
  * @version $Revision$
  */
 public class ChainingProfileMapperImpl
-        implements IProfileMapper, IProfileSelectionRequestHandler {
+        implements IProfileMapper {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
     
@@ -69,26 +70,6 @@ public class ChainingProfileMapperImpl
                 "so returning default profile [{}].",
                 subMappers, defaultProfileName);
         return defaultProfileName;
-    }
-
-    /*
-     * Delegate profile selection handling to those sub-mappers that implement the handler interface.
-     */
-    @Override
-    public void handleProfileSelectionRequest(
-            final String profileKey, final IPerson person, final HttpServletRequest request) {
-
-        for (final IProfileMapper mapper : subMappers) {
-
-            if (mapper instanceof IProfileSelectionRequestHandler) {
-                IProfileSelectionRequestHandler handler = (IProfileSelectionRequestHandler) mapper;
-
-                handler.handleProfileSelectionRequest(profileKey, person, request);
-
-            }
-
-        }
-
     }
 
     @Override
