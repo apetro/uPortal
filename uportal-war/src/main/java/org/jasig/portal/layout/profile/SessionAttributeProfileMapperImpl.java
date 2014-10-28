@@ -27,6 +27,7 @@ import javax.servlet.http.HttpSession;
 import org.jasig.portal.security.IPerson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationListener;
 import org.springframework.util.Assert;
 
 /**
@@ -35,7 +36,7 @@ import org.springframework.util.Assert;
  * @version $Revision$
  */
 public class SessionAttributeProfileMapperImpl
-    implements IProfileMapper, IProfileSelectionRequestHandler {
+    implements IProfileMapper, ApplicationListener<ProfileSelectionEvent> {
 
     /**
      * Since uPortal 4.2, instead of externally relying upon this key and hoping that a runtime
@@ -105,23 +106,22 @@ public class SessionAttributeProfileMapperImpl
      * can subsequently find it and use it to determine a profile mapping.
      */
     @Override
-    public void handleProfileSelectionRequest(final String profileKey, IPerson person, final HttpServletRequest request) {
+    public void onApplicationEvent(ProfileSelectionEvent event) {
 
-        Assert.notNull(request, "Cannot handle profile selection on a null ServletRequest");
-
-        HttpSession session = request.getSession(false);
+        final HttpSession session = event.getRequest().getSession(false);
 
         Assert.notNull(session, "Cannot store a profile selection into a null session.");
 
-        session.setAttribute(this.attributeName, profileKey);
+        session.setAttribute(this.attributeName, event.getRequestedProfileKey());
 
-        logger.trace("Stored desired profile key [{}] into session (at attribute [{}]).", profileKey, attributeName);
+        logger.trace("Stored desired profile key [{}] into session (at attribute [{}]).",
+                event.getRequestedProfileKey(), attributeName);
 
-        final String fnameTheKeyMapsTo = this.mappings.get(profileKey);
+        final String fnameTheKeyMapsTo = this.mappings.get( event.getRequestedProfileKey() );
 
         if (null == fnameTheKeyMapsTo) {
             logger.warn("The desired profile key {} has no mapping so will have no effect.",
-                    profileKey);
+                    event.getRequestedProfileKey());
         }
 
     }
