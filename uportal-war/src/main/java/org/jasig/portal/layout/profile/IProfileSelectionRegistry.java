@@ -22,6 +22,8 @@ package org.jasig.portal.layout.profile;
  * Registry for user selections of profiles.
  *
  * Because the domain model here is so very simple, represented as plain old Strings.
+ *
+ * @since uPortal 4.2
  */
 public interface IProfileSelectionRegistry {
 
