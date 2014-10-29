@@ -20,6 +20,7 @@ package org.jasig.portal.layout.profile;
 
 /**
  * Represents a profile selection, which is a username and profile fname pair.
+ * @since uPortal 4.2
  */
 public interface IProfileSelection {
 
