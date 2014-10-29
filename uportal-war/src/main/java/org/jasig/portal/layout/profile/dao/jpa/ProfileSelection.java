@@ -36,7 +36,11 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Version;
 import java.io.Serializable;
 
-
+/**
+ * JPA implementation of IProfileSelection domain object.
+ *
+ * @since uPortal 4.2
+ */
 @Entity
 @Table(name = "UP_PROFILE_SELECTION")
 @SequenceGenerator(name="UP_PROFILE_SELECTION_GEN",
