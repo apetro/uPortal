@@ -21,6 +21,7 @@ package org.jasig.portal.layout.profile;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jasig.portal.security.IPerson;
 import org.springframework.context.ApplicationEvent;
 
@@ -113,5 +114,14 @@ public class ProfileSelectionEvent
                 .append(this.person)
                 .toHashCode();
 
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("source", this.source)
+                .append("requestedProfileKey", this.requestedProfileKey)
+                .append("person", this.person)
+                .toString();
     }
 }
